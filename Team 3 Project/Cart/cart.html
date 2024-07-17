@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        .cart-item {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 20px;
+        }
+        .cart-item img {
+            width: 150px;
+            margin-right: 20px;
+        }
+        .cart-item-details {
+            flex: 1;
+        }
+        .cart-item-details h2 {
+            margin-top: 0;
+        }
+        .price {
+            font-size: 18px;
+            color: #e67e22;
+            margin: 10px 0;
+        }
+        .quantity {
+            display: flex;
+            align-items: center;
+        }
+        .quantity button {
+            padding: 5px 10px;
+            font-size: 16px;
+            background-color: #e67e22;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .quantity span {
+            padding: 0 10px;
+            font-size: 16px;
+        }
+        .total-price {
+            font-size: 22px;
+            color: #e67e22;
+            text-align: right;
+            margin-top: 20px;
+        }
+        .place-order {
+            display: none; /* Initially hide the button */
+            background-color: #229ee6;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Your Cart</h1>
+    <div id="cart-items"></div>
+    <div class="total-price" id="total-price">Total: ₹0</div>
+    <button class="place-order" id="place-order-btn">Place Order</button>
+</div>
+
+<script>
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function updateCart() {
+        const cartItemsContainer = document.getElementById('cart-items');
+        cartItemsContainer.innerHTML = '';
+        let totalPrice = 0;
+        cart.forEach((item, index) => {
+            // Ensure quantity is at least 0
+            if (item.quantity < 0 || isNaN(item.quantity)) {
+                item.quantity = 0;
+            }
+            const cartItem = document.createElement('div');
+            cartItem.className = 'cart-item';
+            cartItem.innerHTML = `
+                <img src="${item.image}" alt="${item.name}">
+                <div class="cart-item-details">
+                    <h2>${item.name}</h2>
+                    <div class="price">₹${item.price}</div>
+                    <div class="quantity">
+                        <button onclick="changeQuantity(${index}, -1)">-</button>
+                        <span>${item.quantity}</span>
+                        <button onclick="changeQuantity(${index}, 1)">+</button>
+                    </div>
+                </div>
+            `;
+            cartItemsContainer.appendChild(cartItem);
+            totalPrice += item.price * item.quantity;
+        });
+        document.getElementById('total-price').textContent = `Total: ₹${totalPrice}`;
+
+        // Show or hide the Place Order button based on cart length
+        const placeOrderBtn = document.getElementById('place-order-btn');
+        placeOrderBtn.style.display = cart.length > 0 ? 'inline-block' : 'none';
+    }
+
+    function changeQuantity(index, delta) {
+        if (cart[index].quantity + delta > 0) {
+            cart[index].quantity += delta;
+        } else {
+            cart.splice(index, 1); // Remove item if quantity reaches 0
+        }
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCart();
+    }
+
+    updateCart();
+
+    // Functionality for the "Place Order" button (does nothing in this example)
+    document.getElementById('place-order-btn').addEventListener('click', function() {
+        // This is where you can add functionality to proceed with the order
+        // For now, it does nothing in this example
+        console.log('Place Order button clicked.');
+    });
+</script>
+</body>
+</html>

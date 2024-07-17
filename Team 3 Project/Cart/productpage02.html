@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        .cart-icon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+        .cart-icon span {
+            background-color: #e67e22;
+            color: #fff;
+            border-radius: 50%;
+            padding: 5px 10px;
+            position: relative;
+            top: -10px;
+            left: -10px;
+        }
+        .product {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .product-image {
+            flex: 1;
+            padding: 20px;
+        }
+        .product-image img {
+            width: 100%;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+        .product-details {
+            flex: 2;
+            padding: 20px;
+        }
+        .product-details h1 {
+            margin-top: 0;
+        }
+        .price {
+            font-size: 24px;
+            color: #e67e22;
+            margin: 20px 0;
+        }
+        .description {
+            margin: 20px 0;
+        }
+        .add-to-cart {
+            display: inline-block;
+            background-color: #e67e22;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+        }
+        .buy-now {
+            display: inline-block;
+            background-color: #229ee6;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+        }
+        .reviews {
+            margin-top: 50px;
+        }
+        .review {
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+        }
+        .review .user {
+            font-weight: bold;
+        }
+        .review .rating {
+            color: #f39c12;
+        }
+        .review .comment {
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="cart-icon" onclick="redirectToCart()">
+    <i class="fas fa-shopping-cart"></i>
+    <span id="cart-count">0</span>
+</div>
+
+<div class="container">
+    <div class="product">
+        <div class="product-image">
+            <img src="https://images.pexels.com/photos/3649765/pexels-photo-3649765.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Jacket">
+        </div>
+        <div class="product-details">
+            <h1>Denim Jacket</h1>
+            <div class="price">₹999</div>
+            <div class="description">
+                <p>Dennis Lingo Men's Regular Fit Long Sleeve Button Down Panel Denim Jacket</p>
+                <p>Material: Crafted with 100% Cotton sophisticated yet breathable fabric giving it a rich look, skin friendly fabric for comfort of wearing. These Dennis Lingo Truckers are cut to an easy regular fit with functional metal button up style.</p>
+            </div>
+            <button class="add-to-cart" onclick="addToCart('Denim Jacket', 999, 'https://images.pexels.com/photos/3649765/pexels-photo-3649765.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500')">Add to Cart</button>
+            <button class="buy-now">BUY NOW</button>
+        </div>
+    </div>
+
+    <div class="reviews">
+        <h2>Customer Reviews</h2>
+        <div class="review">
+            <div class="user">John Doe</div>
+            <div class="rating">★★★★☆</div>
+            <div class="comment">Great product! Highly recommend.</div>
+        </div>
+        <div class="review">
+            <div class="user">Jane Smith</div>
+            <div class="rating">★★★☆☆</div>
+            <div class="comment">Good, but could be better.</div>
+        </div>
+        <div class="review">
+            <div class="user">Mark Wilson</div>
+            <div class="rating">★★★★★</div>
+            <div class="comment">Excellent quality, worth the price!</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function updateCartCount() {
+        const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+        document.getElementById('cart-count').textContent = cartCount;
+    }
+
+    function addToCart(name, price, image) {
+        const existingItemIndex = cart.findIndex(item => item.name === name);
+        if (existingItemIndex >= 0) {
+            cart[existingItemIndex].quantity += 1;
+        } else {
+            cart.push({ name, price, image, quantity: 1 });
+        }
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();
+    }
+
+    function redirectToCart() {
+        window.location.href = 'cart.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', updateCartCount);
+</script>
+</body>
+</html>

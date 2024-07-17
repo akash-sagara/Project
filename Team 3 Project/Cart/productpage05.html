@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-top: 20px;
+            position: relative; /* Added to allow positioning of the cart icon */
+        }
+        .product {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .product-image {
+            flex: 1;
+            padding: 20px;
+        }
+        .product-image img {
+            width: 100%;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+        .product-details {
+            flex: 2;
+            padding: 20px;
+        }
+        .product-details h1 {
+            margin-top: 0;
+        }
+        .price {
+            font-size: 24px;
+            color: #e67e22;
+            margin: 20px 0;
+        }
+        .description {
+            margin: 20px 0;
+        }
+        .add-to-cart {
+            display: inline-block;
+            background-color: #e67e22;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+        }
+        .buy-now {
+            display: inline-block;
+            background-color: #229ee6;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+        }
+        .reviews {
+            margin-top: 50px;
+        }
+        .review {
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+        }
+        .review .user {
+            font-weight: bold;
+        }
+        .review .rating {
+            color: #f39c12;
+        }
+        .review .comment {
+            margin-top: 5px;
+        }
+        /* Square cart icon styles */
+        .cart-icon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #e67e22;
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 1000; /* Ensure the icon stays on top of other elements */
+            text-decoration: none; /* Remove underline */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Add shadow for depth */
+        }
+        .cart-icon span {
+            position: relative;
+            top: -2px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="cart-icon" onclick="redirectToCart()">
+    <i class="fas fa-shopping-cart"></i>
+    <span id="cart-count">0</span>
+</div>
+
+<div class="container">
+    <div class="product">
+        <div class="product-image">
+            <img src="https://rukminim2.flixcart.com/image/612/612/xif0q/gown/n/m/r/na-s-3-4-sleeve-stitched-miss-17-miss-clothing-na-original-imah2kx8q9r9uky6.jpeg?q=70" alt="Anarkali Gown">
+        </div>
+        <div class="product-details">
+            <h1>Anarkali Gown (Pink)</h1>
+            <div class="price">₹499</div>
+            <div class="description">
+                <p>Floral Print Georgette Stitched Wedding, Casual, Party & Festive, Wedding & Festive<br> Neck: Round Neck<br> Sleeve: 3/4 Sleeve</p>
+            </div>
+            <button class="add-to-cart" onclick="addToCart('Anarkali Gown (Pink)', 499, 'https://rukminim2.flixcart.com/image/612/612/xif0q/gown/n/m/r/na-s-3-4-sleeve-stitched-miss-17-miss-clothing-na-original-imah2kx8q9r9uky6.jpeg?q=70')">Add to Cart</button>
+            <button class="buy-now">BUY NOW</button>
+        </div>
+    </div>
+
+    <div class="reviews">
+        <h2>Customer Reviews</h2>
+        <div class="review">
+            <div class="user">payal</div>
+            <div class="rating">★★★★☆</div>
+            <div class="comment">Very nice.</div>
+        </div>
+        <div class="review">
+            <div class="user">kavitha</div>
+            <div class="rating">★★★☆☆</div>
+            <div class="comment">Good, but could be better.</div>
+        </div>
+        <div class="review">
+            <div class="user">moh razi</div>
+            <div class="rating">★★★★★</div>
+            <div class="comment">Excellent quality, worth the price!</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function updateCartCount() {
+        const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+        document.getElementById('cart-count').textContent = cartCount;
+    }
+
+    function addToCart(name, price, image) {
+        const existingItemIndex = cart.findIndex(item => item.name === name);
+        if (existingItemIndex >= 0) {
+            cart[existingItemIndex].quantity += 1;
+        } else {
+            cart.push({ name, price, image, quantity: 1 });
+        }
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();
+    }
+
+    function redirectToCart() {
+        window.location.href = 'cart.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', updateCartCount);
+</script>
+
+</body>
+</html>
